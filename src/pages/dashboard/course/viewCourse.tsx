@@ -9,7 +9,8 @@ import PageNav from '../../../components/organism/breadcrum/pageNav';
 import Form from '../../../components/molecule/form';
 import { useParams } from 'react-router-dom';
 import { useFetchData } from '../../../hooks/useFetchData';
-import { COURSE_API } from '../../../api/endpoint/endpoint';
+import { COURSE_API, DOC_API } from '../../../api/endpoint/endpoint';
+import { useMakeRequest } from '../../../hooks/useMakeRequest';
 
 interface ICourseDetails {
   title: string;
@@ -19,10 +20,10 @@ interface ICourseDetails {
 }
 
 const ViewCourse = () => {
-  // const { data } = useFetchData(COURSE_API + '');
   const [addDoc, setAddDoc] = useState<boolean>(false);
   const { id } = useParams();
   const { data, refetch } = useFetchData<any>(COURSE_API + `/${id}`);
+  const makeRequest = useMakeRequest();
 
   const courseInfoData = getCourseDetails(data);
   const handleAddDoc = () => {
@@ -30,8 +31,18 @@ const ViewCourse = () => {
   };
 
   const handleUpload = (data: any) => {
-    console.log('upload this -->', data);
-    setAddDoc(false);
+    makeRequest(
+      DOC_API,
+      'POST',
+      data,
+      () => {
+        refetch();
+      },
+      () => {},
+      () => {
+        setAddDoc(false);
+      }
+    );
   };
 
   const documents: any[] = [];
