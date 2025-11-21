@@ -21,6 +21,7 @@ interface ICourseDetails {
 
 const ViewCourse = () => {
   const [addDoc, setAddDoc] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { id } = useParams();
   const { data, refetch } = useFetchData<any>(COURSE_API + `/${id}`);
   const makeRequest = useMakeRequest();
@@ -31,15 +32,20 @@ const ViewCourse = () => {
   };
 
   const handleUpload = (data: any) => {
+    setLoading(true);
+    const payload = new FormData();
+    payload.append('file', data.file[0]);
+    payload.append('courseId', id as string);
     makeRequest(
       DOC_API,
       'POST',
-      data,
+      payload,
       () => {
         refetch();
       },
       () => {},
       () => {
+        setLoading(false);
         setAddDoc(false);
       }
     );
@@ -110,7 +116,7 @@ const ViewCourse = () => {
         width={ModalWidth.MEDIUM}
         title="Add Document"
       >
-        <Form elements={addDocFile} showSubmit onSubmit={handleUpload} />
+        <Form loading={loading} elements={addDocFile} showSubmit onSubmit={handleUpload} />
       </Modal>
     </div>
   );

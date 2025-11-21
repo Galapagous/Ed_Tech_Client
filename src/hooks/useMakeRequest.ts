@@ -41,7 +41,7 @@ export function useMakeRequest() {
       }
       onFail(error);
     } finally {
-      onFinal;
+      onFinal();
     }
   };
 }
