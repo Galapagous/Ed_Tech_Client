@@ -91,14 +91,13 @@ const ViewCourse = () => {
           />
         </div>
 
-        {documents.length > 0 ? (
+        {data?.docs?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {documents.map((doc: string, index: number) => (
+            {data?.docs?.map((doc: string, index: number) => (
               <DocPreview key={index} doc={doc} setDocuments />
             ))}
           </div>
         ) : (
-          // Empty State
           <div className="bg-white/5 backdrop-blur-sm border-2 border-dashed border-white/20 rounded-lg p-12 text-center">
             <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
               <AiFillFilePdf size={40} className="text-gray-400" />

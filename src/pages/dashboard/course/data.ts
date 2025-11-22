@@ -39,7 +39,7 @@ export const getCourseDetails = (data: any) => [
   },
   {
     label: 'CreatedAt',
-    value: 'Nov 30 2025',
+    value: data?.created_at.split('T')[0],
   },
 ];
 
