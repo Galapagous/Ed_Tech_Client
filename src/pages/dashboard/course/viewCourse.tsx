@@ -94,7 +94,7 @@ const ViewCourse = () => {
         {data?.docs?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {data?.docs?.map((doc: string, index: number) => (
-              <DocPreview key={index} doc={doc} setDocuments />
+              <DocPreview key={index} doc={doc} />
             ))}
           </div>
         ) : (

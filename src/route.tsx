@@ -10,6 +10,7 @@ import DashboardLayout from './components/template/dashboard.layout';
 import Analytics from './pages/dashboard/analytics';
 import Course from './pages/dashboard/course';
 import ViewCourse from './pages/dashboard/course/viewCourse';
+import Quiz from './pages/dashboard/quiz';
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: 'courses/view/:id',
         element: <ViewCourse />,
+      },
+      {
+        path: 'quiz',
+        element: <Quiz />,
       },
     ],
   },
