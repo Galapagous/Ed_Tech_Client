@@ -2,17 +2,47 @@ import { useState } from 'react';
 import { BiBookOpen, BiCalendar, BiPlay } from 'react-icons/bi';
 import { FiFileText } from 'react-icons/fi';
 import { RiAiGenerate2 } from 'react-icons/ri';
+import { useMakeRequest } from '../../../../hooks/useMakeRequest';
+import { QUESTION_API } from '../../../../api/endpoint/endpoint';
+import { useFetchData } from '../../../../hooks/useFetchData';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
-const ViewQuiz = ({ course }: { course: any }) => {
+const ViewQuiz = ({ course, refetch }: { course: any; refetch: () => void }) => {
   const [loading, setLoading] = useState(false);
-  const handleDeleteCourse = (courseId: string) => {
-    console.log(courseId);
-  };
+  const { data } = useFetchData<number>(QUESTION_API + `/${course.id}`);
+  const makeRequest = useMakeRequest();
+  const navigate = useNavigate();
+
   const handleGenerateQuestion = () => {
+    if (data && data >= 1) {
+      return toast.error(`Course Already have ${data} questions`);
+    }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
+    makeRequest(
+      QUESTION_API,
+      'POST',
+      {
+        id: course.id,
+      },
+      data => {
+        console.log(data);
+        refetch();
+      },
+      error => {
+        console.log(error);
+      },
+      () => {
+        setLoading(false);
+      }
+    );
+  };
+
+  const handleStartQuiz = () => {
+    if (!data || data <= 0) {
+      return toast.error(`Course do not have questions`);
+    }
+    navigate(`/dashboard/quiz/start/${course?.id}`);
   };
   return (
     <div
@@ -25,7 +55,7 @@ const ViewQuiz = ({ course }: { course: any }) => {
             <BiBookOpen size={20} className="text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-50 text-lg mb-2">{course?.couse}</h3>
+            <h3 className="font-semibold text-gray-50 text-lg mb-2">{course?.course}</h3>
             <p className="text-gray-300 text-sm">{course.description}</p>
             <div className="flex items-center space-x-4 mt-6 text-sm text-gray-500">
               <span className="flex items-center">
@@ -37,7 +67,7 @@ const ViewQuiz = ({ course }: { course: any }) => {
                 {course?.updatedAt}
               </span>
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                {course.questions?.length}
+                {data}
               </span>
               <span
                 className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -58,7 +88,10 @@ const ViewQuiz = ({ course }: { course: any }) => {
           >
             <RiAiGenerate2 className={`${loading ? 'animate-spin' : ''}`} size={16} />
           </button>
-          <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors">
+          <button
+            onClick={handleStartQuiz}
+            className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+          >
             <BiPlay size={16} />
           </button>
         </div>
