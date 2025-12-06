@@ -2,7 +2,11 @@ import Writter from '../../../../assets/svg/undraw_book-writer_ri5u.svg';
 import Button, { IButtonType } from '../../../../components/atom/button/button';
 import { instructions } from '../data';
 
-const Instruction = () => {
+interface Iinstruction {
+  close: () => void;
+}
+
+const Instruction = ({ close }: Iinstruction) => {
   return (
     <div className="text-white">
       <h1 className="font-semibold text-2xl">Instruction</h1>
@@ -16,12 +20,11 @@ const Instruction = () => {
           ))}
         </ul>
 
-        <div className="mt-8 flex flex-col md:flex-row items-center md:items-start gap-6 justify-center">
-          <img className="w-1/2 md:w-1/3" src={Writter} alt="writing illustration" />
+        <div className="mt-8 flex flex-col items-center md:items-start gap-6 justify-center">
+          <img className="w-1/2 md:w-1/3 block" src={Writter} alt="writing illustration" />
 
-          <div className="flex items-center justify-center gap-6">
-            <Button text="Accept" type={IButtonType.PRIMARY} />
-            <Button text="Reject" type={IButtonType.SECONDARY} />
+          <div className="flex items-center justify-center gap-6 mt-10 mx-auto">
+            <Button onClick={close} text="Accept" type={IButtonType.PRIMARY} />
           </div>
         </div>
       </div>
