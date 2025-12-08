@@ -1,28 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { COURSE_API } from '../../../api/endpoint/endpoint';
 import { useFetchData } from '../../../hooks/useFetchData';
-import Modal, { ModalWidth } from '../../../components/organism/modal';
-import Instruction from './sub/instruction';
+import { QUESTION_API } from '../../../api/endpoint/endpoint';
 import { BiStopwatch } from 'react-icons/bi';
-import { questions } from './data';
-import Button, { IButtonType } from '../../../components/atom/button/button';
 import Question from './sub/question';
+import Button, { IButtonType } from '../../../components/atom/button/button';
 
 export type AnswerMap = Record<number, number | null>;
 
 const StartQuiz = () => {
-  const id = useParams();
-  const { data } = useFetchData<any>(COURSE_API + `/${id}`);
+  const { id } = useParams();
+  const data = useFetchData<any>(QUESTION_API + `/quiz/${id}`);
+  console.log(data.data);
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
   const [activeQuestion, setActiveQuestion] = useState<number>(0);
   const [activeOption, setActiveOption] = useState<number>(0);
   const [allAnswers, setAllAnswers] = useState<AnswerMap>({});
+  const [activeCount, setActiveCount] = useState<number>(Number(0));
   const quizLength = (len: number) => {
-    return 3 * len;
+    if (!len) return;
+    setActiveCount(len * 3);
   };
-  const [activeCount, setActiveCount] = useState<number>(quizLength(questions?.length));
 
   useEffect(() => {
     if (!startQuiz) return;
@@ -42,11 +41,12 @@ const StartQuiz = () => {
 
   const handleStartQuiz = () => {
     setShowNotification(false);
+    quizLength(data?.data?.length);
     setStartQuiz(true);
   };
 
   const handleNext = () => {
-    if (activeQuestion === questions?.length - 1) return;
+    if (activeQuestion === data?.data?.length - 1) return;
     setActiveQuestion(prev => (prev += 1));
   };
 
@@ -56,7 +56,7 @@ const StartQuiz = () => {
   };
 
   const percentageDone = (): number => {
-    return (activeQuestion / (questions?.length + 1)) * 100;
+    return (activeQuestion / (data?.data?.length + 1)) * 100;
   };
 
   const handleOptionSelection = (questionId: number, selection: number) => {
@@ -86,7 +86,7 @@ const StartQuiz = () => {
 
         <div className="w-2/3 bg-primary_200 text-white mx-auto mt-16 h-2/3 px-20 py-16">
           <Question
-            questions={questions[activeQuestion]}
+            questions={data?.data?.[activeQuestion]}
             answer={allAnswers}
             handleOptionSelect={handleOptionSelection}
           />
@@ -101,14 +101,6 @@ const StartQuiz = () => {
           </div>
         </div>
       </div>
-      <Modal
-        showModal={showNotification}
-        close={() => setShowNotification(false)}
-        width={ModalWidth.LARGE}
-        dontShowClose={true}
-      >
-        <Instruction close={handleStartQuiz} />
-      </Modal>
     </div>
   );
 };
