@@ -11,7 +11,6 @@ export type AnswerMap = Record<number, number | null>;
 const StartQuiz = () => {
   const { id } = useParams();
   const data = useFetchData<any>(QUESTION_API + `/quiz/${id}`);
-  console.log(data.data);
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
   const [activeQuestion, setActiveQuestion] = useState<number>(0);
@@ -60,8 +59,11 @@ const StartQuiz = () => {
   };
 
   const handleOptionSelection = (questionId: number, selection: number) => {
-    console.log('i am called', questionId, selection);
     setAllAnswers((prev: any) => ({ ...prev, [questionId]: selection }));
+  };
+
+  const handleSubmit = () => {
+    console.log('ans -->', allAnswers);
   };
 
   return (
@@ -96,7 +98,7 @@ const StartQuiz = () => {
               <Button onClick={handleNext} text="Next" type={IButtonType.SECONDARY} />
             </div>
             <div>
-              <Button text="Finish" type={IButtonType.PRIMARY} />
+              <Button onClick={handleSubmit} text="Finish" type={IButtonType.PRIMARY} />
             </div>
           </div>
         </div>

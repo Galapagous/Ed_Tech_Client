@@ -21,21 +21,24 @@ const Question = ({ questions, answer, handleOptionSelect }: any) => {
   const [isActive, setIsactive] = useState<any | null>(null);
   const handleOptionSelection = (id: any) => {
     setIsactive(id);
-    handleOptionSelect(questions?.id, id);
+    handleOptionSelect(questions?.question?.id, id);
   };
   return (
-    <div className="w-auto">
+    <div className="w-auto h-[500px]">
       <h1 className="text-xl">{questions?.question?.question}</h1>
-      <div className="mt-10">
+      <div className="mt-10 overflow-auto">
         {questions?.options?.map((option: any) => (
           <div
             onClick={() => handleOptionSelection(option.id)}
-            className={`flex ${answer[questions.id] === option.id ? 'bg-purple-600 text-white' : ''} items-center justify-between hover:bg-white hover:text-primary_100 hover:font-semibold hover:border-l-2 hover:border-primary_100 px-4 py-3 cursor-pointer`}
+            className={`flex ${answer[questions?.question?.id] === option.id ? 'bg-purple-600 text-white' : ''} items-center justify-between hover:bg-white hover:text-primary_100 hover:font-semibold hover:border-l-2 hover:border-primary_100 px-4 py-3 cursor-pointer`}
           >
-            <p>{option?.value}</p>
+            <div className="flex items-center justify-start">
+              <span className="mr-4 ">{option?.option_id}</span>
+              <p>{option?.value}</p>
+            </div>
             <input
               type="radio"
-              checked={answer[questions.id] === option.id}
+              checked={answer[questions?.question?.id] === option.id}
               name={String(questions.id)}
               id={String(option.id)}
             />
