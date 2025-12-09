@@ -22,6 +22,7 @@ export function useMakeRequest() {
     try {
       const response = await axiosAuth[method.toLowerCase()](url, formData);
       const message = response?.data?.message || 'success';
+      console.log('mess -->', message);
       if (response?.status) {
         if (!options?.dontNotifyOnSuccess) {
           toast.success(message);
@@ -34,7 +35,8 @@ export function useMakeRequest() {
         }
       }
     } catch (error: any) {
-      const message = error?.response?.message || 'Something went wrong';
+      const message =
+        error?.response?.message || error?.response?.data?.error?.message || 'Something went wrong';
       if (error?.response?.request?.status === 401) logout();
       if (!options?.dontNotifyOnFailure) {
         toast.error(message);

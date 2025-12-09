@@ -26,7 +26,6 @@ const ViewQuiz = ({ course, refetch }: { course: any; refetch: () => void }) => 
         id: course.id,
       },
       data => {
-        console.log(data);
         refetch();
       },
       error => {

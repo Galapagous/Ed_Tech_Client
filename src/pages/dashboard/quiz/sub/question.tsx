@@ -7,15 +7,15 @@ interface IOption {
   value: string;
 }
 
-interface IQuestion {
-  questions: {
-    id: number;
-    question: string;
-    options: IOption[];
-  };
-  answer: AnswerMap;
-  handleOptionSelect: any;
-}
+// interface IQuestion {
+//   questions: {
+//     id: number;
+//     question: string;
+//     options: IOption[];
+//   };
+//   answer: AnswerMap;
+//   handleOptionSelect: any;
+// }
 
 const Question = ({ questions, answer, handleOptionSelect }: any) => {
   const [isActive, setIsactive] = useState<any | null>(null);
