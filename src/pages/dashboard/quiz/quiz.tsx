@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useFetchData } from '../../../hooks/useFetchData';
-import { QUESTION_API } from '../../../api/endpoint/endpoint';
+import { QUESTION_API, RESULT_API } from '../../../api/endpoint/endpoint';
 import { BiStopwatch } from 'react-icons/bi';
 import Question from './sub/question';
 import Button, { IButtonType } from '../../../components/atom/button/button';
+import { useMakeRequest } from '../../../hooks/useMakeRequest';
 
 export type AnswerMap = Record<number, number | null>;
 
@@ -17,6 +18,9 @@ const StartQuiz = () => {
   const [activeOption, setActiveOption] = useState<number>(0);
   const [allAnswers, setAllAnswers] = useState<AnswerMap>({});
   const [activeCount, setActiveCount] = useState<number>(Number(0));
+  const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+  const makeRequest = useMakeRequest();
+  const navigate = useNavigate();
   const quizLength = (len: number) => {
     if (!len) return;
     setActiveCount(len * 3);
@@ -63,7 +67,20 @@ const StartQuiz = () => {
   };
 
   const handleSubmit = () => {
-    console.log('ans -->', allAnswers);
+    setLoadingSubmit(true);
+    const payload = allAnswers;
+    makeRequest(
+      RESULT_API,
+      'POST',
+      payload,
+      () => {
+        navigate('/dashboard/quiz');
+      },
+      () => {},
+      () => {
+        setLoadingSubmit(false);
+      }
+    );
   };
 
   return (
@@ -98,7 +115,12 @@ const StartQuiz = () => {
               <Button onClick={handleNext} text="Next" type={IButtonType.SECONDARY} />
             </div>
             <div>
-              <Button onClick={handleSubmit} text="Finish" type={IButtonType.PRIMARY} />
+              <Button
+                loading={loadingSubmit}
+                onClick={handleSubmit}
+                text="Finish"
+                type={IButtonType.PRIMARY}
+              />
             </div>
           </div>
         </div>

@@ -22,7 +22,6 @@ export function useMakeRequest() {
     try {
       const response = await axiosAuth[method.toLowerCase()](url, formData);
       const message = response?.data?.message || 'success';
-      console.log('mess -->', message);
       if (response?.status) {
         if (!options?.dontNotifyOnSuccess) {
           toast.success(message);
