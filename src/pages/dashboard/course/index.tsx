@@ -9,6 +9,8 @@ import Form from '../../../components/molecule/form';
 import { useMakeRequest } from '../../../hooks/useMakeRequest';
 import { COURSE_API } from '../../../api/endpoint/endpoint';
 import { useFetchData } from '../../../hooks/useFetchData';
+import Barner from '../../../components/organism/dashboard/Barner';
+import CourseImg from '../../../assets/image/book2.jpeg';
 
 const Course = () => {
   const navigate = useNavigate();
@@ -61,7 +63,10 @@ const Course = () => {
   };
   return (
     <div className="bg-primary_300 text-white h-screen p-5">
-      <h1 className="text-2xl font-semibold">Course</h1>
+      {/* <h1 className="text-2xl font-semibold">Course</h1> */}
+      <div className="py-5">
+        <Barner image={CourseImg} title="COURSE" color="#050E3C" />
+      </div>
       <div className="my-3 flex justify-end w-full">
         <Button text="Add+" type={IButtonType.SECONDARY} onClick={() => setViewModal(true)} />
       </div>
