@@ -1,30 +1,38 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useFetchData } from '../../../hooks/useFetchData';
-import { QUESTION_API, RESULT_API } from '../../../api/endpoint/endpoint';
-import { BiStopwatch } from 'react-icons/bi';
+import { ANSWER_API, QUESTION_API, RESULT_API } from '../../../api/endpoint/endpoint';
+import { BiChevronLeft, BiChevronRight, BiPowerOff, BiStopwatch } from 'react-icons/bi';
 import Question from './sub/question';
 import Button, { IButtonType } from '../../../components/atom/button/button';
 import { useMakeRequest } from '../../../hooks/useMakeRequest';
+import { IQuizSource } from '../../../types';
+import Modal, { ModalWidth } from '../../../components/organism/modal';
+import { IoPower } from 'react-icons/io5';
 
 export type AnswerMap = Record<number, number | null>;
 
 const StartQuiz = () => {
   const { id } = useParams();
-  const data = useFetchData<any>(QUESTION_API + `/quiz/${id}`);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [showNotification, setShowNotification] = useState<boolean>(true);
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
   const [activeQuestion, setActiveQuestion] = useState<number>(0);
-  const [activeOption, setActiveOption] = useState<number>(0);
-  const [allAnswers, setAllAnswers] = useState<AnswerMap>({});
+  // const [activeOption, setActiveOption] = useState<number>(0);
+  const [allAnswers, setAllAnswers] = useState<AnswerMap>([]);
   const [activeCount, setActiveCount] = useState<number>(Number(0));
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
+  const [confirmQuit, setConfirmQuit] = useState<boolean>(false);
+  const [viewPrompt, setViewPrompt] = useState<boolean>(false);
   const makeRequest = useMakeRequest();
   const navigate = useNavigate();
   const quizLength = (len: number) => {
     if (!len) return;
     setActiveCount(len * 3);
   };
+  const source: string = searchParams.get('from') as string;
+  const url = source === IQuizSource.QUIZ ? QUESTION_API + `/quiz/${id}` : ANSWER_API + `/${id}`;
+  const data = useFetchData<any>(url);
 
   useEffect(() => {
     if (!startQuiz) return;
@@ -63,12 +71,13 @@ const StartQuiz = () => {
   };
 
   const handleOptionSelection = (questionId: number, selection: number) => {
-    setAllAnswers((prev: any) => ({ ...prev, [questionId]: selection }));
+    setAllAnswers((prev: any) => [...prev, { questionId: questionId, answerId: selection }]);
   };
 
   const handleSubmit = () => {
     setLoadingSubmit(true);
-    const payload = allAnswers;
+    const payload = { answers: allAnswers, courseId: id };
+
     makeRequest(
       RESULT_API,
       'POST',
@@ -81,6 +90,12 @@ const StartQuiz = () => {
         setLoadingSubmit(false);
       }
     );
+  };
+
+  const handleQuit = () => {
+    const url = source === IQuizSource.RESULT ? `/dashboard/result` : `/dashboard/courses`;
+    if (!viewPrompt) return setViewPrompt(true);
+    navigate(url);
   };
 
   return (
@@ -100,14 +115,22 @@ const StartQuiz = () => {
           <div className="flex items-center gap-5">
             <BiStopwatch />
             <p>{activeCount}</p>
+            <Button
+              onClick={handleQuit}
+              text="Quit"
+              type={IButtonType.SECONDARY}
+              icon={BiPowerOff}
+            />
           </div>
         </div>
 
         <div className="w-2/3 bg-primary_200 text-white mx-auto mt-16 h-2/3 px-20 py-16">
           <Question
+            id={data?.data?.[activeQuestion]?.id}
             questions={data?.data?.[activeQuestion]}
-            answer={allAnswers}
+            answer={source === IQuizSource.QUIZ ? allAnswers[activeQuestion] : null}
             handleOptionSelect={handleOptionSelection}
+            source={source}
           />
           <div className="flex items-center gap-10 mt-20 justify-between">
             <div className="flex items-center gap-10">
@@ -120,11 +143,22 @@ const StartQuiz = () => {
                 onClick={handleSubmit}
                 text="Finish"
                 type={IButtonType.PRIMARY}
+                disabled={source === IQuizSource.RESULT}
               />
             </div>
           </div>
         </div>
       </div>
+      <Modal close={() => setViewPrompt(false)} showModal={viewPrompt} width={ModalWidth.MEDIUM}>
+        <div className="w-full mx-auto">
+          <IoPower className="mx-auto text-white mb-5" size={40} />
+          <h1 className="mb-10 text-white text-center">Are you sure you want to exit</h1>
+          <div className="flex items-center justify-center gap-10">
+            <Button text="Yes" onClick={handleQuit} type={IButtonType.PRIMARY} />
+            <Button text="No" onClick={() => setViewPrompt(false)} type={IButtonType.SECONDARY} />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

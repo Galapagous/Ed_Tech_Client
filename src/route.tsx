@@ -13,6 +13,7 @@ import ViewCourse from './pages/dashboard/course/viewCourse';
 import Quiz from './pages/dashboard/quiz';
 import StartQuiz from './pages/dashboard/quiz/quiz';
 import Result from './pages/dashboard/result';
+import ViewResult from './pages/dashboard/result/view';
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: 'result',
         element: <Result />,
+      },
+      {
+        path: 'result/view/:id',
+        element: <ViewResult />,
       },
       {
         path: 'quiz/start/:id',
