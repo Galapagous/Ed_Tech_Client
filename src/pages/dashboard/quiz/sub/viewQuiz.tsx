@@ -41,7 +41,7 @@ const ViewQuiz = ({ course, refetch }: { course: any; refetch: () => void }) => 
     if (!data || data <= 0) {
       return toast.error(`Course do not have questions`);
     }
-    navigate(`/dashboard/quiz/start/${course?.id}`);
+    navigate(`/dashboard/quiz/start/${course?.id}?from=quiz`);
   };
   return (
     <div

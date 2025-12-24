@@ -14,7 +14,7 @@ const Barner = ({ title, image, color }: IBarnner) => {
       <img
         src={image}
         alt="page title image"
-        className="absolute right-10 -bottom-10 w-52 h-40 rounded-full object-cover"
+        className="absolute right-10 -bottom-10 w-40 h-40 rounded-full object-cover"
       />
     </div>
   );

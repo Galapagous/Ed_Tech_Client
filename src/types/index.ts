@@ -17,3 +17,8 @@ export interface IQuestion {
   courseId: string;
   options: IOption[];
 }
+
+export enum IQuizSource {
+  QUIZ = 'quiz',
+  RESULT = 'result',
+}
