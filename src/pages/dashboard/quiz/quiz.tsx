@@ -22,7 +22,7 @@ const StartQuiz = () => {
   const [allAnswers, setAllAnswers] = useState<AnswerMap>([]);
   const [activeCount, setActiveCount] = useState<number>(Number(0));
   const [loadingSubmit, setLoadingSubmit] = useState<boolean>(false);
-  const [confirmQuit, setConfirmQuit] = useState<boolean>(false);
+  // const [confirmQuit, setConfirmQuit] = useState<boolean>(false);
   const [viewPrompt, setViewPrompt] = useState<boolean>(false);
   const makeRequest = useMakeRequest();
   const navigate = useNavigate();

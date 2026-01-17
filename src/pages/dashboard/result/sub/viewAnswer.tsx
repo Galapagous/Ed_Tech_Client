@@ -49,7 +49,7 @@ const ViewAnswer = ({ id, value }: ViewAnswerProps) => {
                      hover:bg-green-700 active:scale-95 transition"
         >
           <BiPlay size={26} />
-          Start Quiz
+          View Answers
         </button>
       </div>
     </div>

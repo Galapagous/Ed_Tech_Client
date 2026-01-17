@@ -54,7 +54,7 @@ const Table = ({ tableHead, tableData, showAction, actionMenu, handleCurrent }: 
                     onClick={() => handleMenuClick(index, data?.id)}
                   />
                   {activeSelection === index && (
-                    <div className="absolute top-2 right-0 bg-white text-black flex flex-col items-start px-4 py-2 rounded-sm gap-2 h-fit font-semibold z-30">
+                    <div className="absolute top-2 right-0 bg-white text-black flex flex-col items-start px-4 py-2 rounded-sm gap-2 h-fit font-semibold z-50">
                       {actionMenu?.map(({ label, action }) => (
                         <button className="" onClick={action}>
                           {label}

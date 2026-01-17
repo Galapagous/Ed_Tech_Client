@@ -7,7 +7,7 @@ interface IQuestion {
   question: any;
   options: any;
   answer: string;
-  option_id: string;
+  optionid: string;
 }
 interface IQuiz {
   id: number;
@@ -27,12 +27,12 @@ const Question = ({ questions, answer, handleOptionSelect, source }: IQuiz) => {
     if (source !== IQuizSource.RESULT) return '';
 
     // correct answer
-    if (questions.answer === option.optionId) {
+    if (questions?.question.answer === option.option_id) {
       return 'bg-green-500';
     }
 
     // selected but wrong
-    if (questions.option_id === option.id) {
+    if (questions.optionid === option.id) {
       return 'bg-red-500';
     }
 
