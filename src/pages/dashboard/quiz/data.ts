@@ -1,6 +1,6 @@
 export const getQuizData = (courseData: any) => {
-  if (courseData?.length === 0) return [];
-  const result = courseData?.map((data: any) => ({
+  if (courseData?.result?.length === 0) return [];
+  const result = courseData?.result?.map((data: any) => ({
     id: data?.id,
     course: data?.title,
     description: data?.description,
@@ -16,5 +16,3 @@ export const instructions = [
   'Kindly use the Next and Prev button to navigate the question',
   'Choose an option by selecting it from the list',
 ];
-
-

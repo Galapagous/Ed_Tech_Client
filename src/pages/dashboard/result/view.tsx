@@ -16,8 +16,8 @@ const ViewResult = () => {
       <div className="p-6 mb-8">
         <h1 className="mb-4">Attempts</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {data?.length ? (
-            data?.map((result: any) => <ViewAnswer id={result?.id} value={result?.score} />)
+          {data?.resultData?.length ? (
+            data?.resultData?.map((result: any) => <ViewAnswer id={result?.id} value={result} />)
           ) : (
             <p>No data</p>
           )}

@@ -16,7 +16,7 @@ const Course = () => {
   const navigate = useNavigate();
   const [viewModal, setViewModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+  const [_, setDeleteLoading] = useState<boolean>(false);
   const { data, refetch } = useFetchData<any>(COURSE_API);
   const [currentData, setCurrentData] = useState<any | null>(null);
   const makeRequest = useMakeRequest();

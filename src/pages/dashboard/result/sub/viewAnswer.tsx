@@ -1,9 +1,10 @@
 import { BiPlay, BiBookOpen } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
+import { getAverage } from '../data';
 
 interface ViewAnswerProps {
   id: string;
-  value: string;
+  value: any;
 }
 
 const ViewAnswer = ({ id, value }: ViewAnswerProps) => {
@@ -34,9 +35,9 @@ const ViewAnswer = ({ id, value }: ViewAnswerProps) => {
         <div className="flex flex-col items-center">
           <span className="text-gray-400 text-sm mb-1">Score</span>
           <span
-            className={`text-[4rem] font-bold ${Number(value) <= 3 ? 'text-red-500' : Number(value) < 6 ? 'text-yellow-300' : 'text-green-500'}`}
+            className={`text-[4rem] font-bold ${getAverage(value?.score, value?.question) <= 3 ? 'text-red-500' : getAverage(value?.score, value?.question) < 6 ? 'text-yellow-300' : 'text-green-500'}`}
           >
-            {value}/10
+            {value?.score}/{value?.question}
           </span>
         </div>
 
