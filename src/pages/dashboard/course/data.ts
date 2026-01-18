@@ -8,13 +8,13 @@ interface ICourseData {
 }
 
 export const couseTabelHeader = ['Title', 'Description', 'Docs', 'createdAt'];
-export const courseTabledata = (data: any[]) => {
-  if (data?.length === 0) return [];
-  const result = data?.map(element => ({
+export const courseTabledata = (data: any) => {
+  if (data?.result?.length === 0) return [];
+  const result = data?.result?.map((element: any) => ({
     id: element.id,
     title: element.title,
     description: element.description,
-    docs: element.documents?.length || 0,
+    docs: element.doc || 0,
     createdat: 'Nov 9 2025',
   }));
   return result;
@@ -35,7 +35,7 @@ export const getCourseDetails = (data: any) => [
   },
   {
     label: 'Questions',
-    value: 23,
+    value: data?.questions,
   },
   {
     label: 'CreatedAt',

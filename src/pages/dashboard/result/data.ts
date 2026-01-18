@@ -1,11 +1,11 @@
-export const resultTabledata = (data: any[]) => {
-  if (data?.length === 0) return [];
-  const result = data?.map(element => ({
+export const resultTabledata = (data: any) => {
+  if (data?.result?.length === 0) return [];
+  const result = data?.result?.map((element: any) => ({
     id: element.id,
     title: element.title,
     description: element.description,
-    docs: element.documents?.length || 0,
-    createdat: 'Nov 9 2025',
+    docs: element.doc || 0,
+    createdat: element?.created_at?.split('T')[0],
   }));
   return result;
 };
@@ -21,3 +21,7 @@ export const resultData = [
     updatedAt: '01-12-25',
   },
 ];
+
+export const getAverage = (value: number, total: number): number => {
+  return Math.floor(value / total);
+};
